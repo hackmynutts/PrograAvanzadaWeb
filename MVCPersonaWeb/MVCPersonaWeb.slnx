@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="MVCPersonaWeb.API/MVCPersonaWeb.API.csproj" Id="225d436a-282c-4233-a5f7-b06d4776c660" />
+  <Project Path="MVCPersonaWeb/MVCPersonaWeb.csproj" />
+</Solution>

@@ -1,0 +1,73 @@
+﻿@model IEnumerable<ProgramacionAvanzadaWeb.Models.CinemaRoomDTO>
+
+@{
+    ViewData["Title"] = "ListCinemaRooms";
+}
+
+<h1>Lista de salas de cine</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.type)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.capacity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.cantSold)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            var porcentaje = (item.cantSold * 100) / item.capacity;
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.type)
+                </td>
+                <td>
+                    @if(porcentaje >= 90)
+                        {
+                            <span style="color:red;font-weight:bold;">
+                                Casi LLENO
+                            </span>
+                        }else if (porcentaje >= 50)
+                        {
+                            <span style="color:orange;font-weight:bold;">
+                                Buena ocupacion
+                            </span>
+                        }else if (porcentaje < 50)
+                        {
+                            <span style="color:green;font-weight:bold;">
+                                Disponible
+                            </span>
+                        }
+                    else {
+                            @Html.DisplayFor(modelItem => item.capacity)
+                        }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.cantSold)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                </td>
+            </tr>
+}
+    </tbody>
+</table>

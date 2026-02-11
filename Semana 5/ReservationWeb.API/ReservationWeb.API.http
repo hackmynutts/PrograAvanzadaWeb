@@ -1,0 +1,6 @@
+@ReservationWeb.API_HostAddress = http://localhost:5264
+
+GET {{ReservationWeb.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

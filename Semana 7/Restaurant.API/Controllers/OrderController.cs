@@ -1,83 +1,48 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Restaurant.API.DTO;
+using Restaurant.API.Services;
+
+// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Restaurant.API.Controllers
 {
-    public class OrderController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class OrderController : ControllerBase
     {
-        // GET: OrderController
-        public ActionResult Index()
+        private readonly IOrderServices _orderServices;
+        public OrderController(IOrderServices orderServices) => _orderServices = orderServices;
+
+        [HttpGet]
+        public async Task<IEnumerable<OrderDTO>> Get() => await _orderServices.GetAllOrdersAsync(); // Return all orders
+
+        // GET api/<OrderController>/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<OrderDTO>> Get(int id)
         {
-            return View();
+            var order = await _orderServices.GetOrderByIdAsync(id);
+            return order is not null ? Ok(order) : NotFound(); // Return the order if found, otherwise return 404 Not Found
         }
 
-        // GET: OrderController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        // GET: OrderController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: OrderController/Create
+        // POST api/<OrderController>
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult<OrderDTO>> Create(AddOrderDTO orderDto)
         {
-            try
+            if (!ModelState.IsValid) return BadRequest(ModelState); // Validate the incoming DTO
+            var createdOrder = await _orderServices.CreateOrderAsync(new OrderDTO
             {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+                CustomerName = orderDto.CustomerName,
+                Dish = orderDto.Dish
+            });
+            return CreatedAtAction(nameof(Get), new { id = createdOrder.ID }, createdOrder); // Return 201 Created with the location of the new resource
         }
 
-        // GET: OrderController/Edit/5
-        public ActionResult Edit(int id)
+        // Post api/<OrderController>/5
+        [HttpPost("{id}/advance")]
+        public async Task<ActionResult> AdvanceStatus(int id)
         {
-            return View();
-        }
-
-        // POST: OrderController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: OrderController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: OrderController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            var result = await _orderServices.AdvanceOrderStatusAsync(id);
+            return result ? NoContent() : NotFound(); // Return 204 No Content if successful, otherwise return 404 Not Found
         }
     }
 }

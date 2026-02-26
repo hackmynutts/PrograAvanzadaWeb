@@ -6,6 +6,7 @@
         Pending,
         InProgress,
         Completed,
+        Delivered,
         Cancelled
     }
     public class Order

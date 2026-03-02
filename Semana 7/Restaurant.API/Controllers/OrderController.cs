@@ -42,6 +42,7 @@ namespace Restaurant.API.Controllers
         public async Task<ActionResult> AdvanceStatus(int id)
         {
             var result = await _orderServices.AdvanceOrderStatusAsync(id);
+            //OPERADOR TERNARIO : Si el resultado es verdadero, devuelve NoContent (204), de lo contrario devuelve NotFound (404)
             return result ? NoContent() : NotFound(); // Return 204 No Content if successful, otherwise return 404 Not Found
         }
     }

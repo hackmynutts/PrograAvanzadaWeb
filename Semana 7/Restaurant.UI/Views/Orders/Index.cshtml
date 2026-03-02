@@ -1,0 +1,105 @@
+﻿@model IEnumerable<Restaurant.UI.Models.OrderViewModel>
+@{
+    ViewData["Title"] = "Pedidos (Tablero)";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row justify-content-center mb-4">
+        <div class="col-12 col-md-10 col-lg-8 text-center">
+            <h1 class="display-5 mb-3">Pedidos (Tablero)</h1>
+
+            <form method="post" action="/Orders/Create" class="row g-2 justify-content-center align-items-center">
+                <div class="col-auto" style="min-width:180px;">
+                    <input name="CustomerName" placeholder="CustomerName" class="form-control" />
+                </div>
+                <div class="col-auto" style="min-width:180px;">
+                    <input name="Dish" placeholder="Dish" class="form-control" />
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary">Crear</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="board d-flex justify-content-center gap-3">
+        <div class="column">
+            <div class="column-header">Recibido</div>
+            <div class="column-body">
+                @foreach (var o in Model.Where(x => x.Status == "Pending").OrderBy(x => x.ID))
+                {
+                    <div class="card card-order mb-2">
+                        <div class="card-body p-2">
+                            <div class="order-title"><strong>@o.CustomerName</strong> — @o.Dish</div>
+                            <div class="text-muted small">@o.CreateAt.ToLocalTime().ToString("g")</div>
+                            <div class="mt-2">
+                                <form method="post" action="/Orders/Advance" style="display:inline">
+                                    <input type="hidden" name="ID" value="@o.ID" />
+                                    <button type="submit" class="btn btn-sm btn-outline-primary">Avanzar</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="column">
+            <div class="column-header">En preparación</div>
+            <div class="column-body">
+                @foreach (var o in Model.Where(x => x.Status == "InProgress").OrderBy(x => x.ID))
+                {
+                    <div class="card card-order mb-2">
+                        <div class="card-body p-2">
+                            <div class="order-title"><strong>@o.CustomerName</strong> — @o.Dish</div>
+                            <div class="text-muted small">@o.CreateAt.ToLocalTime().ToString("g")</div>
+                            <div class="mt-2">
+                                <form method="post" action="/Orders/Advance" style="display:inline">
+                                    <input type="hidden" name="ID" value="@o.ID" />
+                                    <button type="submit" class="btn btn-sm btn-outline-primary">Avanzar</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="column">
+            <div class="column-header">Listo</div>
+            <div class="column-body">
+                @foreach (var o in Model.Where(x => x.Status == "Completed").OrderBy(x => x.ID))
+                {
+                    <div class="card card-order mb-2">
+                        <div class="card-body p-2">
+                            <div class="order-title"><strong>@o.CustomerName</strong> — @o.Dish</div>
+                            <div class="text-muted small">@o.CreateAt.ToLocalTime().ToString("g")</div>
+                            <div class="mt-2">
+                                <form method="post" action="/Orders/Advance" style="display:inline">
+                                    <input type="hidden" name="ID" value="@o.ID" />
+                                    <button type="submit" class="btn btn-sm btn-outline-primary">Avanzar</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="column delivered-column">
+            <div class="column-header">Entregado</div>
+            <div class="column-body">
+                @foreach (var o in Model.Where(x => x.Status == "Delivered").OrderBy(x => x.ID))
+                {
+                    <div class="card card-order mb-2">
+                        <div class="card-body p-2">
+                            <div class="order-title"><strong>@o.CustomerName</strong> — @o.Dish</div>
+                            <div class="text-muted small">@o.CreateAt.ToLocalTime().ToString("g")</div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

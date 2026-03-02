@@ -1,7 +1,18 @@
+using Restaurant.UI.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Leer correctamente la URL desde appsettings (asegúrate de que "ApiBaseUrl" sea una cadena en appsettings.json)
+var apiBase = builder.Configuration.GetValue<string>("ApiBaseUrl") ?? "http://localhost:5100/";
+
+// Registrar typed client para Orders API
+builder.Services.AddHttpClient<IOrdersAPIClient, OrdersAPIClient>(client =>
+{
+    client.BaseAddress = new System.Uri(apiBase);
+});
 
 var app = builder.Build();
 
@@ -20,8 +31,7 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapControllerRoute("default", "{controller=Orders}/{action=Index}/{id?}");
 
 app.Run();

@@ -1,0 +1,6 @@
+@ProjectAgileBoard.API_HostAddress = http://localhost:5212
+
+GET {{ProjectAgileBoard.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

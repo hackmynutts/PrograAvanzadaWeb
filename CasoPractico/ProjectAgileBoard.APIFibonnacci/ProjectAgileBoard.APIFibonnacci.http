@@ -1,0 +1,6 @@
+@ProjectAgileBoard.APIFibonnacci_HostAddress = http://localhost:5085
+
+GET {{ProjectAgileBoard.APIFibonnacci_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

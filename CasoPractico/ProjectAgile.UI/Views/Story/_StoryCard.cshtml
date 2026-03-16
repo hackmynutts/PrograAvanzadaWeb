@@ -1,0 +1,45 @@
+﻿@model ProjectAgile.UI.Models.StoryViewModel
+
+<div class="card mb-3 shadow-sm @ViewData["Color"]">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">@Model.Title</h5>
+
+            @if (Model.Status == "Done")
+            {
+                <i class="@ViewData["Icon"]"></i>
+            }
+        </div>
+        <p>@Model.Description</p>
+        <small>Asignado: @Model.AssignedTo</small><br />
+        <small>Estimación: @Model.Estimacion</small>@if (Model.Estimacion >= 13)
+                                                            {
+                                                                @Html.Raw(ViewData["Badge"])
+                                                            }
+                                                    <br />
+
+
+        @if (Model.Status == "Done")
+        {
+            <small>Estado: @Model.Status</small>
+        }
+
+        @if (Model.Status != "Done")
+        {
+            <form asp-controller="Story" asp-action="Update" method="post">
+                <input type="hidden" name="id" value="@Model.ID" />
+
+                <select name="newStatus" class="form-select mt-2">
+                    <option value="Backlog" selected="@(Model.Status == "Backlog")">Backlog</option>
+                    <option value="ToDo" selected="@(Model.Status == "ToDo")">To Do</option>
+                    <option value="InProgress" selected="@(Model.Status == "InProgress")">In Progress</option>
+                    <option value="Done" selected="@(Model.Status == "Done")">Done</option>
+                </select>
+
+                <button type="submit" class="btn btn-primary btn-sm mt-2">
+                    Mover
+                </button>
+            </form>
+        }
+    </div>
+</div>

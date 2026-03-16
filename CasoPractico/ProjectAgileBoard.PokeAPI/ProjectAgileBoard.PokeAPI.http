@@ -1,0 +1,6 @@
+@ProjectAgileBoard.PokeAPI_HostAddress = http://localhost:5118
+
+GET {{ProjectAgileBoard.PokeAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

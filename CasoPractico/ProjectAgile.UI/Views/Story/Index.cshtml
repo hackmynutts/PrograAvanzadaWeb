@@ -1,5 +1,4 @@
 ﻿@model List<ProjectAgile.UI.Models.StoryViewModel>
-
 @{
     // Agrupamos las historias por su estado para mostrarlas en columnas separadas
     var backlog = Model.Where(s => s.Status == "Backlog").ToList(); // Filtramos las historias que están en el estado "Backlog" y las convertimos en una lista
@@ -31,53 +30,40 @@
     </div>
 </div>
 
-<div class="row">
+@{
 
-    @foreach (var column in new[]
-        {// Creamos un array de objetos anónimos para representar cada columna del tablero
-        new { Title = "Backlog", Items = backlog }, // Cada objeto tiene un título y una lista de historias que pertenecen a esa columna
-        new { Title = "To Do", Items = todo },
-        new { Title = "In Progress", Items = inprogress },
-        new { Title = "Done", Items = done }
-        })
+    var columns = new List<BoardColumnViewModel>
     {
-        <div class="col-md-3">
-            <h4>@column.Title</h4>
+        new BoardColumnViewModel
+        {
+            Title = "Backlog",
+            Status = "Backlog",
+            Stories = backlog
+        },
+        new BoardColumnViewModel
+        {
+            Title = "To Do",
+            Status = "ToDo",
+            Stories = todo
+        },
+        new BoardColumnViewModel
+        {
+            Title = "In Progress",
+            Status = "InProgress",
+            Stories = inprogress
+        },
+        new BoardColumnViewModel
+        {
+            Title = "Done",
+            Status = "Done",
+            Stories = done
+        }
+    };
+}
 
-            @foreach (var story in column.Items)
-            {
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h5>@story.Title</h5>
-                        <p>@story.Description</p>
-                        <small>Asignado: @story.AssignedTo</small><br />
-                        <small>Estimación: @story.Estimacion</small><br />
-                        @if (story.Status == "Done")
-                        {
-                            <small>Estado: @story.Status</small>
-                        }
-
-                        @if (story.Status != "Done")
-                        {
-                            <form asp-controller="Story" asp-action="Update" method="post">
-                                <input type="hidden" name="id" value="@story.ID" />
-
-                                <select name="newStatus" class="form-select mt-2">
-                                    <option value="Backlog" selected="@(story.Status == "Backlog")">Backlog</option>
-                                    <option value="ToDo" selected="@(story.Status == "ToDo")">To Do</option>
-                                    <option value="InProgress" selected="@(story.Status == "InProgress")">In Progress</option>
-                                    <option value="Done" selected="@(story.Status == "Done")">Done</option>
-                                </select>
-
-                                <button type="submit" class="btn btn-primary btn-sm mt-2">
-                                    Mover
-                                </button>
-                            </form>
-                        }
-                    </div>
-                </div>
-            }
-        </div>
+<div class="row g-3">
+    @foreach (var column in columns)
+    {
+        @await Html.PartialAsync("_Column", column)
     }
-
 </div>

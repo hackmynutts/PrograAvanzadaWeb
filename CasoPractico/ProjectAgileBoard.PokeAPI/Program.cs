@@ -9,15 +9,6 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-var fibonacciEstimates = new[] { 2, 3, 5, 8, 13, 21};
-
-app.MapGet("/api/estimation", () =>
-{
-    var estimate = fibonacciEstimates[Random.Shared.Next(fibonacciEstimates.Length)];
-    return Results.Ok(new { estimation = estimate });
-})
-.WithName("GetEstimation");
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

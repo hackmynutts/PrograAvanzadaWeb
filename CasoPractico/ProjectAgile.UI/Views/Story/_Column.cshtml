@@ -1,0 +1,39 @@
+﻿@model ProjectAgile.UI.Models.BoardColumnViewModel
+
+<div class="col-md-3">
+    <div class="bg-light border rounded p-3 h-100">
+        <h4 class="text-center mb-3">@Model.Title</h4>
+
+        @if (Model.Stories != null && Model.Stories.Any())
+        {
+            @foreach (var story in Model.Stories)
+            {
+                var color = Model.Status switch
+                {
+                    "Backlog" => "bg-secondary",
+                    "ToDo" => "bg-info",
+                    "InProgress" => "bg-danger",
+                    "Done" => "bg-success",
+                    _ => "bg-dark"
+                };
+                var icono = "bi bi-check2-square text-light";
+                var badge = story.Estimacion >= 13 ? "<span class=\"badge text-bg-secondary\">Mucho esfuerzo<i class=\"bi bi-radioactive\"></i></span>" : "";
+
+                @await Html.PartialAsync(
+                                            "_StoryCard",
+                                            story,
+                                            new ViewDataDictionary(ViewData)
+                                            {
+                                                    ["Color"] = color,
+                                                    ["Icon"] = icono,
+                                                    ["Badge"] = badge
+                                            }
+                )
+            }
+        }
+        else
+        {
+            <p class="text-muted text-center">No hay historias</p>
+        }
+    </div>
+</div>

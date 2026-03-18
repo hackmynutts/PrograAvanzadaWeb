@@ -1,5 +1,4 @@
 ﻿using ProjectAgile.UI.Models;
-using ProjectAgileBoard.API.Models;
 
 namespace ProjectAgile.UI.Services
 {
@@ -24,8 +23,7 @@ namespace ProjectAgile.UI.Services
                 Title = title,
                 Description = description,
                 AssignedTo = assignedTo,
-                Estimacion = estimacion,
-                Status = Status.Backlog.ToString()
+                Estimacion = estimacion
             };
             var response = await _httpClient.PostAsJsonAsync("api/Story", story, cancellationToken = default);
             response.EnsureSuccessStatusCode();

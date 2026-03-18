@@ -8,21 +8,13 @@
                     httpClient = factory.CreateClient("PokeApi");
             }
 
-            public async Task<int?> GetPokeNumberAsync(CancellationToken ct = default)
-            {
-                try
-                {
-                    var response = await httpClient.GetFromJsonAsync<PokemonResponse>($"api/PokeNumber", ct);
-                    return response?.pokeID;
-                }
-                catch (HttpRequestException)
-                {
-                    // Handle HTTP request errors (e.g., 404 Not Found)
-                    return null;
-                }
-            }
+        public async Task<int?> GetPokeNumberAsync(CancellationToken ct = default)
+        {
+            var response = await httpClient.GetFromJsonAsync<PokemonResponse>("PokeNumber", ct);
+            return response?.pokeID;
+        }
 
-            private sealed class PokemonResponse
+        private sealed class PokemonResponse
             {
                 public int pokeID { get; set; }
             }

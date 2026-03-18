@@ -1,5 +1,4 @@
 using ProjectAgile.UI.Services;
-using ProjectAgileBoard.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

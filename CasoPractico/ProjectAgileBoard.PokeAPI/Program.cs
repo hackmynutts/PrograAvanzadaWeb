@@ -9,6 +9,13 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+app.MapGet("/api/PokeNumber", () =>
+{
+    int pokeID = Random.Shared.Next(1, 151);
+    return Results.Ok(new { pokeID = pokeID });
+})
+.WithName("GetPokeNumber");
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

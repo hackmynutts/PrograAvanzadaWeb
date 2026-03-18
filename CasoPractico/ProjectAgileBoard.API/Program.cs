@@ -5,31 +5,35 @@ using ProjectAgileBoard.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // DI
 builder.Services.AddScoped<IStoryRepository, StoryRepository>();
 builder.Services.AddScoped<IStoryServices, StoryServices>();
+builder.Services.AddScoped<IUsuariosServices, UsuariosServices>();
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<EstimationClientApi>();
+builder.Services.AddScoped<PokeClientApi>();
 
 // Configurar la conexión a la base de datos
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-//llamar a la API de estimación
+//llamar a la API
 builder.Services.AddHttpClient("EstimationApi", client =>
 {
     client.BaseAddress = new Uri(builder.Configuration["EstimationApiBaseUrl"]!);
 });
 
+builder.Services.AddHttpClient("PokeApi", client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["PokeApiBaseUrl"]!);
+});
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -37,9 +41,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();

@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectAgileBoard.APIFibonn
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectAgileBoard.xUnit", "..\ProjectAgileBoard.xUnit\ProjectAgileBoard.xUnit.csproj", "{32DEFB83-0AA3-4DA8-B131-A68852252760}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectAgileBoard.PokeAPI", "..\ProjectAgileBoard.PokeAPI\ProjectAgileBoard.PokeAPI.csproj", "{DF662061-9E93-4BA7-A896-6CB9B92BAF4B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{32DEFB83-0AA3-4DA8-B131-A68852252760}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32DEFB83-0AA3-4DA8-B131-A68852252760}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{32DEFB83-0AA3-4DA8-B131-A68852252760}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF662061-9E93-4BA7-A896-6CB9B92BAF4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF662061-9E93-4BA7-A896-6CB9B92BAF4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF662061-9E93-4BA7-A896-6CB9B92BAF4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF662061-9E93-4BA7-A896-6CB9B92BAF4B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

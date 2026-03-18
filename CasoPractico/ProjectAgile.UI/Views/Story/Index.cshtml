@@ -12,16 +12,17 @@
 <div class="row justify-content-center mb-4">
     <div class="col-12 col-md-10 col-lg-8 text-center">
         <h1 class="display-5 mb-3">Nueva Historia</h1>
+        <a asp-controller="Usuario" asp-action="Create">+ Nuevo usuario</a>
 
         <form method="post" action="/Story/Create" class="row g-2 justify-content-center align-items-center">
             <div class="col-auto" style="min-width:180px;">
-                <input name="title" placeholder="title" class="form-control" />
+                <input name="title" placeholder="Titulo" class="form-control" />
             </div>
             <div class="col-auto" style="min-width:180px;">
-                <input name="description" placeholder="description" class="form-control" />
+                <input name="description" placeholder="Descripcion" class="form-control" />
             </div>
             <div class="col-auto" style="min-width:180px;">
-                <input name="assignedTo" placeholder="assignedTo" class="form-control" />
+                <input name="assignedTo" placeholder="Asignado a" class="form-control" />
             </div>
             <div class="col-auto">
                 <button type="submit" class="btn btn-primary">Crear</button>

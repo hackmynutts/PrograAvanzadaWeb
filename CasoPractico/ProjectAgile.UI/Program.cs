@@ -15,6 +15,12 @@ builder.Services.AddHttpClient<IStoryApiClient, StoryApiClient>(client =>
     client.BaseAddress = new System.Uri(apiBase);
 });
 
+// Configurar HttpClient para UserServices
+builder.Services.AddHttpClient<IUserApiClient, UserApiClient>(client =>
+{
+    client.BaseAddress = new System.Uri(apiBase);
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

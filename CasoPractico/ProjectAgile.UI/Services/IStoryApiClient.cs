@@ -5,7 +5,7 @@ namespace ProjectAgile.UI.Services
     public interface IStoryApiClient
     {
         Task<List<StoryViewModel>> GetStoriesAsync(CancellationToken cancellationToken = default);
-        Task AddStoryAsync(string title, string description, string assignedTo, int estimacion, CancellationToken cancellationToken = default);
+        Task AddStoryAsync(string title, string description, string assignedTo, CancellationToken cancellationToken = default);
         Task UpdateStoryAsync(int id, string newStatus, CancellationToken cancellationToken);
     }
 }

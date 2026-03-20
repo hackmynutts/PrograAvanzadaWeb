@@ -1,11 +1,4 @@
-﻿@model List<ProjectAgile.UI.Models.StoryViewModel>
-@{
-    // Agrupamos las historias por su estado para mostrarlas en columnas separadas
-    var backlog = Model.Where(s => s.Status == "Backlog").ToList(); // Filtramos las historias que están en el estado "Backlog" y las convertimos en una lista
-    var todo = Model.Where(s => s.Status == "ToDo").ToList();
-    var inprogress = Model.Where(s => s.Status == "InProgress").ToList();
-    var done = Model.Where(s => s.Status == "Done").ToList();
-}
+﻿@model ProjectAgile.UI.Models.AgileBoardViewModel
 
 <h2>Agile Board</h2>
 
@@ -18,12 +11,21 @@
             <div class="col-auto" style="min-width:180px;">
                 <input name="title" placeholder="Titulo" class="form-control" />
             </div>
+
             <div class="col-auto" style="min-width:180px;">
                 <input name="description" placeholder="Descripcion" class="form-control" />
             </div>
-            <div class="col-auto" style="min-width:180px;">
-                <input name="assignedTo" placeholder="Asignado a" class="form-control" />
+
+            <div class="col-auto" style="min-width:220px;">
+                <select name="assignedTo" class="form-select">
+                    <option value="">Seleccione un usuario</option>
+                    @foreach (var user in Model.Users)
+                    {
+                        <option value="@user.Nombre @user.Apellido">@user.Nombre @user.Apellido</option>
+                    }
+                </select>
             </div>
+
             <div class="col-auto">
                 <button type="submit" class="btn btn-primary">Crear</button>
             </div>
@@ -31,39 +33,8 @@
     </div>
 </div>
 
-@{
-
-    var columns = new List<BoardColumnViewModel>
-    {
-        new BoardColumnViewModel
-        {
-            Title = "Backlog",
-            Status = "Backlog",
-            Stories = backlog
-        },
-        new BoardColumnViewModel
-        {
-            Title = "To Do",
-            Status = "ToDo",
-            Stories = todo
-        },
-        new BoardColumnViewModel
-        {
-            Title = "In Progress",
-            Status = "InProgress",
-            Stories = inprogress
-        },
-        new BoardColumnViewModel
-        {
-            Title = "Done",
-            Status = "Done",
-            Stories = done
-        }
-    };
-}
-
 <div class="row g-3">
-    @foreach (var column in columns)
+    @foreach (var column in Model.Columns)
     {
         @await Html.PartialAsync("_Column", column)
     }

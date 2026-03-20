@@ -16,14 +16,13 @@ namespace ProjectAgile.UI.Services
         }
 
         //add story
-        public async Task AddStoryAsync(string title, string description, string assignedTo, int estimacion, CancellationToken cancellationToken = default)
+        public async Task AddStoryAsync(string title, string description, string assignedTo, CancellationToken cancellationToken = default)
         {
             var story = new StoryViewModel
             {
                 Title = title,
                 Description = description,
-                AssignedTo = assignedTo,
-                Estimacion = estimacion
+                AssignedTo = assignedTo
             };
             var response = await _httpClient.PostAsJsonAsync("api/Story", story, cancellationToken = default);
             response.EnsureSuccessStatusCode();

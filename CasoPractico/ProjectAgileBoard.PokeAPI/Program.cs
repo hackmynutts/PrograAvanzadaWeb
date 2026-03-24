@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Builder;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -8,6 +10,12 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+app.MapGet("/api/v2/pokemon/{id}", (int id) =>
+{
+    string imageUrl = $"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{id}.png";
+    return Results.Ok(new { imageUrl });
+}).WithName("GetPokemonImageById");
 
 app.MapGet("/api/PokeNumber", () =>
 {

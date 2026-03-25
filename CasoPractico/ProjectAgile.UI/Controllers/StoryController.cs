@@ -21,6 +21,17 @@ namespace ProjectAgile.UI.Controllers
             var stories = await _storyApiClient.GetStoriesAsync();
             var users = await _userApiClient.GetUsersAsync();
 
+            foreach (var story in stories) 
+            {
+                var user = users.FirstOrDefault(u => u.ID == story.AssignedTo);
+
+                    if (user != null)
+                    {
+                        story.userName = $"{user.Nombre} {user.Apellido}";
+                        story.PokeNumber = user.PokeNumber;
+                    }
+            }
+
             var backlog = stories.Where(s => s.Status == "Backlog").OrderBy(s => s.ID).ToList();
             var todo = stories.Where(s => s.Status == "ToDo").OrderBy(s => s.ID).ToList();
             var inprogress = stories.Where(s => s.Status == "InProgress").OrderBy(s => s.ID).ToList();
@@ -62,16 +73,19 @@ namespace ProjectAgile.UI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(string title, string description, string assignedTo)
+        public async Task<IActionResult> Create(string title, string description, int assignedTo)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(title) || string.IsNullOrWhiteSpace(description) || string.IsNullOrWhiteSpace(assignedTo))
+                if (string.IsNullOrWhiteSpace(title) || string.IsNullOrWhiteSpace(description))
                 {
                     TempData["Error"] = "Datos inválidos.";
                     return RedirectToAction(nameof(Index));
                 }
-                await _storyApiClient.AddStoryAsync(title, description, assignedTo);
+
+                var users = await _userApiClient.GetUsersAsync();
+                var user = users.FirstOrDefault(u => u.ID == assignedTo);
+                await _storyApiClient.AddStoryAsync(title, description, assignedTo, user.PokeNumber);
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)

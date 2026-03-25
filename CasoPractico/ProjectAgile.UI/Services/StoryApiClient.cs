@@ -5,8 +5,13 @@ namespace ProjectAgile.UI.Services
     public class StoryApiClient : IStoryApiClient
     {
         private readonly HttpClient _httpClient;
+        private readonly IUserApiClient _userApiClient;
 
-        public StoryApiClient(HttpClient httpClient) => _httpClient = httpClient;
+        public StoryApiClient(HttpClient httpClient, IUserApiClient userApiClient) 
+        {
+            _userApiClient = userApiClient;
+            _httpClient = httpClient; 
+        }
 
         //List Stories
         public async Task<List<StoryViewModel>> GetStoriesAsync(CancellationToken cancellationToken = default)
@@ -16,13 +21,14 @@ namespace ProjectAgile.UI.Services
         }
 
         //add story
-        public async Task AddStoryAsync(string title, string description, string assignedTo, CancellationToken cancellationToken = default)
+        public async Task AddStoryAsync(string title, string description, int assignedTo, int PokeNumber, CancellationToken cancellationToken = default)
         {
             var story = new StoryViewModel
             {
                 Title = title,
                 Description = description,
-                AssignedTo = assignedTo
+                AssignedTo = assignedTo,
+                PokeNumber = PokeNumber
             };
             var response = await _httpClient.PostAsJsonAsync("api/Story", story, cancellationToken = default);
             response.EnsureSuccessStatusCode();

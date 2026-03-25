@@ -18,6 +18,7 @@
                 };
                 var icono = "bi bi-check2-square text-light";
                 var badge = story.Estimacion >= 13 ? "<span class=\"badge text-bg-secondary\">Mucho esfuerzo<i class=\"bi bi-radioactive\"></i></span>" : "";
+                var pokenumber = story.PokeNumber;
 
                 @await Html.PartialAsync(
                                             "_StoryCard",
@@ -26,7 +27,8 @@
                                             {
                                                     ["Color"] = color,
                                                     ["Icon"] = icono,
-                                                    ["Badge"] = badge
+                                                    ["Badge"] = badge,
+                                                    ["PokeNumber"] = pokenumber
                                             }
                 )
             }

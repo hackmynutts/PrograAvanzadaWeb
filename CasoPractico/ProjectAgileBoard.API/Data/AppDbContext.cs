@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations;
 using ProjectAgileBoard.API.Models;
 
 namespace ProjectAgileBoard.API.Data
@@ -33,7 +34,6 @@ namespace ProjectAgileBoard.API.Data
                 entity.Property(e => e.Email).IsRequired().HasMaxLength(100);
                 entity.Property(e => e.PokeNumber).IsRequired().HasDefaultValue(1);
             });
-
         }
     }
 }

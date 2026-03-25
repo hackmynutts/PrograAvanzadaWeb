@@ -5,6 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+
 // Leer correctamente la URL desde appsettings (asegúrate de que "ApiBaseUrl" sea una cadena en appsettings.json)
 var apiBase = builder.Configuration.GetValue<string>("ApiBaseUrl") ?? "http://localhost:5100/";
 
@@ -18,6 +19,12 @@ builder.Services.AddHttpClient<IStoryApiClient, StoryApiClient>(client =>
 builder.Services.AddHttpClient<IUserApiClient, UserApiClient>(client =>
 {
     client.BaseAddress = new System.Uri(apiBase);
+});
+
+
+builder.Services.AddHttpClient("PokeApi", client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["PokeApiBaseUrl"]!);
 });
 
 var app = builder.Build();

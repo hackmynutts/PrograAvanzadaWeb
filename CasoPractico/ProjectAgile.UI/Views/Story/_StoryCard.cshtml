@@ -3,6 +3,11 @@
 <div class="card mb-3 shadow-sm @ViewData["Color"]">
     <div class="card-body">
         <div class="d-flex justify-content-between align-items-center">
+            <img src="http://localhost:5118/api/v2/pokemon/@Model.PokeNumber"
+                     width="50"
+                     height="50"
+                     alt="avatar" />
+            
             <h5 class="mb-0">@Model.Title</h5>
 
             @if (Model.Status == "Done")
@@ -11,7 +16,7 @@
             }
         </div>
         <p>@Model.Description</p>
-        <small>Asignado: @Model.AssignedTo</small><br />
+        <small>Asignado: @Model.userName</small><br />
         <small>Estimación: @Model.Estimacion</small>@if (Model.Estimacion >= 13)
                                                             {
                                                                 @Html.Raw(ViewData["Badge"])

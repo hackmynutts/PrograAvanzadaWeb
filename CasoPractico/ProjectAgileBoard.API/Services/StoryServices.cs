@@ -1,20 +1,21 @@
 ﻿using ProjectAgileBoard.API.DTO;
 using ProjectAgileBoard.API.Models;
 using ProjectAgileBoard.API.Repository;
+using ProjectAgileBoard.API.Strategy;
 
 namespace ProjectAgileBoard.API.Services
 {
     public class StoryServices : IStoryServices
     {
         private readonly IStoryRepository _repository;
-        private readonly EstimationClientApi _estimationClient;
-        public StoryServices(IStoryRepository repository, EstimationClientApi estimation)
+        private readonly IEstimationStrategyFactory _factory; // inyección de la fábrica
+
+        public StoryServices(IStoryRepository repository, IEstimationStrategyFactory factory) 
         {
             _repository = repository;
-            _estimationClient = estimation;
+            _factory = factory;
         }
 
-        //lista historias
         public async Task<List<StoryDTO>> GetAllStoriesAsync()
         {
             var stories = await _repository.GetAllStoriesAsync();
@@ -29,7 +30,6 @@ namespace ProjectAgileBoard.API.Services
             }).ToList();
         }
 
-        //historia por id
         public async Task<StoryDTO?> GetStoryByIdAsync(int id)
         {
             var story = await _repository.GetStoryByIdAsync(id);
@@ -45,7 +45,6 @@ namespace ProjectAgileBoard.API.Services
             };
         }
 
-        //crear historia
         public async Task<StoryDTO> CreateStoryAsync(StoryDTO storyDto)
         {
             var story = new Story
@@ -54,7 +53,7 @@ namespace ProjectAgileBoard.API.Services
                 Description = storyDto.Description,
                 AssignedTo = storyDto.AssignedTo,
                 Status = Status.Backlog,
-                Estimacion = await _estimationClient.GetEstimationAsync()
+                Estimacion = await _factory.GetStrategy("fibonacci").GetEstimationAsync() // uso la estrategia de Fibonacci para la estimación inicial
             };
             await _repository.AddStoryAsync(story);
             return new StoryDTO
@@ -73,12 +72,12 @@ namespace ProjectAgileBoard.API.Services
             var existingStory = await _repository.GetStoryByIdAsync(id);
             if (existingStory == null) return null;
 
-
             existingStory.Title = storyDto.Title;
             existingStory.Description = storyDto.Description;
             existingStory.AssignedTo = storyDto.AssignedTo;
             existingStory.Status = Enum.Parse<Status>(storyDto.Status);
-            existingStory.Estimacion = storyDto.Estimacion;
+            existingStory.Estimacion = await _factory.GetStrategy("random").GetEstimationAsync(); // uso la estrategia de Random para la actualización de la estimación
+
             await _repository.UpdateStoryAsync(existingStory);
             return new StoryDTO
             {

@@ -133,6 +133,7 @@
                 <option value="">-- Sin asignar --</option>
                 @if (userDict != null)
                 {
+                    foreach (var kv in userDict)
                     @foreach (var kv in userDict)
                     {
                         <option value="@kv.Key"

@@ -19,7 +19,7 @@ namespace ARPATicket.UI.Controllers
         public async Task<ActionResult> Index()
         {
             var users = _userAPIServices.GetAllUsersAsync().Result;
-            ViewBag.Users = users.ToDictionary(u => u.userID, u => u.name);
+            ViewBag.Users = users.ToDictionary(u => u.userID, u => u);
             var tickets = await _ticketAPIServices.GetAllTicketsAsync();
             return View(tickets);
         }
@@ -41,7 +41,7 @@ namespace ARPATicket.UI.Controllers
         public ActionResult Create()
         {
             var users = _userAPIServices.GetAllUsersAsync().Result;
-            ViewBag.Users = users.ToDictionary(u => u.userID, u => u.name);
+            ViewBag.Users = users.ToDictionary(u => u.userID, u => u);
             return View();
         }
 
@@ -74,7 +74,17 @@ namespace ARPATicket.UI.Controllers
         {
             var ticket = await _ticketAPIServices.GetTicketByIDAsync(id);
             if (ticket == null) return NotFound();
-            return View(ticket);
+            var users = _userAPIServices.GetAllUsersAsync().Result;
+            ViewBag.Users = users.ToDictionary(u => u.userID, u => u);
+            var editDto = new TicketEditDTO
+            {
+                ticketID = ticket.ticketID,
+                title = ticket.title,
+                description = ticket.description,
+                status = ticket.status,
+                assignedUserID = ticket.assignedUserID
+            };
+            return View(editDto);
         }
 
         // POST: Ticket/Edit/5

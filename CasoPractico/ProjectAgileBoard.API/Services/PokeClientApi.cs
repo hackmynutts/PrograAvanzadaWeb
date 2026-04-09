@@ -8,13 +8,13 @@
                     httpClient = factory.CreateClient("PokeApi");
             }
 
-        public async Task<int?> GetPokeNumberAsync(CancellationToken ct = default)
-        {
+            public async Task<int?> GetPokeNumberAsync(CancellationToken ct = default)
+            {
             var response = await httpClient.GetFromJsonAsync<PokemonResponse>("PokeNumber", ct);
             return response?.pokeID;
-        }
+            }
 
-        private sealed class PokemonResponse
+            private sealed class PokemonResponse
             {
                 public int pokeID { get; set; }
             }

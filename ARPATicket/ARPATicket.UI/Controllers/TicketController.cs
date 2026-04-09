@@ -1,0 +1,111 @@
+﻿using ARPATicket.UI.Models;
+using ARPATicket.UI.Services;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
+namespace ARPATicket.UI.Controllers
+{
+    public class TicketController : Controller
+    {
+        private readonly ITicketAPIServices _ticketAPIServices;
+        private readonly IUserAPIServices _userAPIServices;
+
+        public TicketController(ITicketAPIServices ticketAPIServices, IUserAPIServices userAPIServices)
+        {
+            _ticketAPIServices = ticketAPIServices;
+            _userAPIServices = userAPIServices;
+        }
+        // GET: TicketController
+        public async Task<ActionResult> Index()
+        {
+            var users = _userAPIServices.GetAllUsersAsync().Result;
+            ViewBag.Users = users.ToDictionary(u => u.userID, u => u.name);
+            var tickets = await _ticketAPIServices.GetAllTicketsAsync();
+            return View(tickets);
+        }
+
+        // GET: TicketController/Details/5
+        public async Task<ActionResult> Details(int id)
+        {
+            var users = _userAPIServices.GetAllUsersAsync().Result;
+            ViewBag.Users = users.ToDictionary(u => u.userID, u => u.name);
+            var ticket = await _ticketAPIServices.GetTicketByIDAsync(id);
+            if (ticket == null)
+            {
+                return NotFound();
+            }
+            return View(ticket);
+        }
+
+        // GET: TicketController/Create
+        public ActionResult Create()
+        {
+            var users = _userAPIServices.GetAllUsersAsync().Result;
+            ViewBag.Users = users.ToDictionary(u => u.userID, u => u.name);
+            return View();
+        }
+
+        // POST: TicketController/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Create(TicketAddDTO newTicket)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var createdTicket = await _ticketAPIServices.CreateTicketAsync(newTicket);
+                    if (createdTicket != null)
+                    {
+                        return RedirectToAction(nameof(Index));
+                    }
+                }
+                return View(newTicket);
+            }
+            catch (Exception)
+            {
+                return View(newTicket);
+                throw new Exception("Error al crear el ticket.");
+            };
+        }
+
+        // GET: Ticket/Edit/5
+        public async Task<ActionResult> Edit(int id)
+        {
+            var ticket = await _ticketAPIServices.GetTicketByIDAsync(id);
+            if (ticket == null) return NotFound();
+            return View(ticket);
+        }
+
+        // POST: Ticket/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit(int id, TicketEditDTO updatedTicket)
+        {
+            if (!ModelState.IsValid) return View(updatedTicket);
+
+            var updated = await _ticketAPIServices.UpdateTicketAsync(updatedTicket);
+            if (updated != null)
+                return RedirectToAction(nameof(Index));
+
+            return View(updatedTicket);
+        }
+
+        // GET: Ticket/Delete/5
+        public async Task<ActionResult> Delete(int id)
+        {
+            var ticket = await _ticketAPIServices.GetTicketByIDAsync(id);
+            if (ticket == null) return NotFound();
+            return View(ticket);
+        }
+
+        // POST: Ticket/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DeleteConfirmed(int id)
+        {
+            await _ticketAPIServices.DeleteTicketAsync(id);
+            return RedirectToAction(nameof(Index));
+        }
+    }
+}

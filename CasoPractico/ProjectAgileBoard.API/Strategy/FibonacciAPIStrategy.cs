@@ -11,7 +11,7 @@ namespace ProjectAgileBoard.API.Strategy
         }
         public async Task<int> GetEstimationAsync()
         {
-            var response = await _http.GetFromJsonAsync<EstimationResponse>("api/estimationFibonacci");
+            var response = await _http.GetFromJsonAsync<EstimationResponse>("api/estimation");
             return response?.Estimation ?? 0;
         }
         private sealed class EstimationResponse

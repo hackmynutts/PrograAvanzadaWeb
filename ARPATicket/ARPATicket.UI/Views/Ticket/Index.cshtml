@@ -1,0 +1,82 @@
+﻿@model IEnumerable<ARPATicket.UI.Models.TicketDTO>
+
+@{
+    ViewData["Title"] = "Tickets";
+    var userDict = ViewBag.Users as Dictionary<int, string>; //Convierte lo que viene del controller (ViewBag) a un diccionario tipado
+}
+
+<h1>Tickets</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ticketID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.priority)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.assignedUserID)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ticketID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.description)
+            </td>
+            <td>
+                @switch     (item.status)
+                {
+                    case ARPATicket.API.Models.Estado.Open:
+                        @:Open
+                    break;
+                    case ARPATicket.API.Models.Estado.InProgress:
+                    @:In Progress
+                        break;
+                    case ARPATicket.API.Models.Estado.Closed:
+                        @:Closed
+                        break;
+                    default:
+                        @:Unknown
+                        break;
+                    }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.priority)
+            </td>
+            <td>
+                    @(userDict != null && userDict.ContainsKey(item.assignedUserID ?? 0)
+                                    ? userDict[item.assignedUserID!.Value]
+                                    : "Unassigned")
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.ticketID }) |
+                @Html.ActionLink("Details", "Details", new { id = item.ticketID }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.ticketID })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

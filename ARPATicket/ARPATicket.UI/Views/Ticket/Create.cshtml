@@ -130,10 +130,9 @@
         <div class="mb-3">
             <label class="form-label">Asignar usuario</label>
             <select asp-for="assignedUserID" class="form-select" id="userSelect">
-                <option value="">-- Sin asignar --</option>
+                <option value="0">-- Sin asignar --</option>  
                 @if (userDict != null)
                 {
-                    foreach (var kv in userDict)
                     @foreach (var kv in userDict)
                     {
                         <option value="@kv.Key"
@@ -144,11 +143,6 @@
                     }
                 }
             </select>
-
-            <div id="avatar-preview">
-                <img id="avatar-img" src="" alt="pokemon" />
-                <span id="avatar-name"></span>
-            </div>
         </div>
 
         <button type="submit" class="btn-crear">Crear Ticket</button>
@@ -158,25 +152,7 @@
 </div>
 
 @section Scripts {
-    <script>
-        const select = document.getElementById('userSelect');
-        const preview = document.getElementById('avatar-preview');
-        const avatarImg = document.getElementById('avatar-img');
-        const avatarName = document.getElementById('avatar-name');
-
-        select.addEventListener('change', function () {
-            const opt = this.options[this.selectedIndex];
-            const avatarId = opt.getAttribute('data-avatar');
-            const name = opt.getAttribute('data-name');
-
-            if (avatarId && parseInt(avatarId) > 0) {
-                avatarImg.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${avatarId}.png`;
-                avatarName.textContent = name;
-                preview.style.display = 'flex';
-            } else {
-                preview.style.display = 'none';
-            }
-        });
-    </script>
-    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

@@ -2,6 +2,7 @@
 using ARPATicket.UI.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace ARPATicket.UI.Controllers
 {
@@ -27,7 +28,7 @@ namespace ARPATicket.UI.Controllers
         // GET: TicketController/Details/5
         public async Task<ActionResult> Details(int id)
         {
-            var users = _userAPIServices.GetAllUsersAsync().Result;
+            var users = await _userAPIServices.GetAllUsersAsync();
             ViewBag.Users = users.ToDictionary(u => u.userID, u => u.name);
             var ticket = await _ticketAPIServices.GetTicketByIDAsync(id);
             if (ticket == null)
@@ -38,9 +39,9 @@ namespace ARPATicket.UI.Controllers
         }
 
         // GET: TicketController/Create
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
-            var users = _userAPIServices.GetAllUsersAsync().Result;
+            var users = await _userAPIServices.GetAllUsersAsync();
             ViewBag.Users = users.ToDictionary(u => u.userID, u => u);
             return View();
         }
@@ -50,23 +51,17 @@ namespace ARPATicket.UI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(TicketAddDTO newTicket)
         {
-            try
+            // Si assignedUserID es 0, convertir a null
+            if (newTicket.assignedUserID == 0)
+                newTicket.assignedUserID = null;
+
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
-                {
-                    var createdTicket = await _ticketAPIServices.CreateTicketAsync(newTicket);
-                    if (createdTicket != null)
-                    {
-                        return RedirectToAction(nameof(Index));
-                    }
-                }
-                return View(newTicket);
+                var createdTicket = await _ticketAPIServices.CreateTicketAsync(newTicket);
+                if (createdTicket != null)
+                    return RedirectToAction(nameof(Index));
             }
-            catch (Exception)
-            {
-                return View(newTicket);
-                throw new Exception("Error al crear el ticket.");
-            };
+            return View(newTicket);
         }
 
         // GET: Ticket/Edit/5
@@ -74,7 +69,7 @@ namespace ARPATicket.UI.Controllers
         {
             var ticket = await _ticketAPIServices.GetTicketByIDAsync(id);
             if (ticket == null) return NotFound();
-            var users = _userAPIServices.GetAllUsersAsync().Result;
+            var users = await _userAPIServices.GetAllUsersAsync();
             ViewBag.Users = users.ToDictionary(u => u.userID, u => u);
             var editDto = new TicketEditDTO
             {

@@ -1,14 +1,13 @@
 @model IEnumerable<ARPATicket.UI.Models.TicketDTO>
 @using ARPATicket.UI.Models
-@using ARPATicket.API.Models
 
 @{
     ViewData["Title"] = "Board";
     var userDict = ViewBag.Users as Dictionary<int, UserDTO>;
 
-    var open       = Model.Where(t => t.status == Estado.Open).ToList();
-    var inProgress = Model.Where(t => t.status == Estado.InProgress).ToList();
-    var closed     = Model.Where(t => t.status == Estado.Closed).ToList();
+    var open = Model.Where(t => t.status == "Open").ToList();
+    var inProgress = Model.Where(t => t.status == "InProgress").ToList();
+    var closed = Model.Where(t => t.status == "Closed").ToList();
 
     string PokemonSprite(int avatarId) =>
         $"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{avatarId}.png";
@@ -152,7 +151,7 @@
 
 <div class="board-header-bar">
     <span class="board-title">ArpaTicket &mdash; Board</span>
-    <a asp-action="Create" class="btn-new-ticket">+ Nuevo ticket ↗</a>
+    <a asp-action="Create" asp-controller="Ticket" class="btn-new-ticket">+ Nuevo ticket ↗</a>
 </div>
 
 <div class="board-wrapper">

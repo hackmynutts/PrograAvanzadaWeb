@@ -57,7 +57,8 @@ namespace ARPATicket.API.Services
                 title = newTicket.title,
                 description = newTicket.description,
                 status = Estado.Open,
-                priority = priority // se asigna la prioridad evaluada
+                priority = priority, // se asigna la prioridad evaluada
+                assignedUserID = newTicket.assignedUserID
             };
             var addedTicket = await _ticketRepository.CreateTicketAsync(ticket);
             return new TicketDTO

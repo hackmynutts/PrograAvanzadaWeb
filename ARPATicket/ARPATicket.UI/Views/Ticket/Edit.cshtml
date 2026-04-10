@@ -1,6 +1,5 @@
 @model ARPATicket.UI.Models.TicketEditDTO
 @using ARPATicket.UI.Models
-@using ARPATicket.API.Models
 
 @{
     ViewData["Title"] = "Editar Ticket";
@@ -120,7 +119,7 @@
                 <option value="Open">Abierto</option>
                 <option value="InProgress">En Proceso</option>
                 <option value="Closed">Cerrado</option>
-            </select>
+            </select>       
         </div>
 
         <div class="mb-3">
@@ -139,11 +138,6 @@
                     }
                 }
             </select>
-
-            <div id="avatar-preview" style="display:@(pokemonSrc != "" ? "flex" : "none")">
-                <img id="avatar-img" src="@pokemonSrc" alt="pokemon" />
-                <span id="avatar-name">@(currentUser?.name ?? "")</span>
-            </div>
         </div>
 
         <button type="submit" class="btn-guardar">Guardar cambios</button>

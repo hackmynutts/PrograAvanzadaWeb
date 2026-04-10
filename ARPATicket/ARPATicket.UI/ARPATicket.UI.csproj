@@ -11,7 +11,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ARPATicket.API\ARPATicket.API.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="CSS\" />
   </ItemGroup>
 
 </Project>
